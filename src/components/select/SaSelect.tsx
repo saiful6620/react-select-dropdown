@@ -28,9 +28,8 @@ export interface IWuSelectProps {
 
 export const SaSelect = ({
   label,
-  placeholder = "Select",
+  placeholder = "Select item",
   width = "220px",
-  isMulti,
 }: IWuSelectProps): React.JSX.Element => {
   const [selectedItem, setSelectedItem] = useState<ISelectOptionType | null>(
     null
@@ -89,7 +88,7 @@ export const SaSelect = ({
           >
             <Fragment>
               <span className={cssStyles.display}>
-                {selectedItem ? selectedItem.name : "Select item"}
+                {selectedItem ? selectedItem.name : placeholder}
               </span>
               <span className={cssStyles.indicator}>
                 <ChevronDownIcon
