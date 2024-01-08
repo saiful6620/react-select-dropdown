@@ -73,17 +73,24 @@
 }
 
 .listBox {
-  margin: 0;
-  padding: 0;
+  border: 1px solid #1b87e6;
   background-color: transparent;
   list-style: none;
   position: absolute;
   width: 100%;
   box-shadow: 0px 4px 8px 0px #00000014;
+  overflow: auto;
+  box-sizing: border-box;
 }
 
 .listBox:focus {
-  outline: 1px solid #1b87e6;
+  outline: 0px solid #1b87e6;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .option {

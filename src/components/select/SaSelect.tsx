@@ -1,37 +1,22 @@
 import React, { Fragment, useState } from "react";
-
-import cssStyles from "./SaSelect.module.css";
 import classNames from "classnames";
-
-import { Combobox, Listbox } from "@headlessui/react";
+import { Listbox } from "@headlessui/react";
 import { ISelectOptionType } from "./types";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import options from "./data";
-
-const largeArray = [];
-
-for (let i = 1; i <= 1000; i++) {
-  largeArray.push({
-    id: i,
-    name: `Item ${i}`,
-  });
-}
-
-// const options = [
-//   {
-//     id: 1,
-//     name: "Durward Reynolds Hello World this is a large text",
-//   },
-//   { id: 2, name: "Kenton Towne", disabled: true },
-//   { id: 3, name: "Therese Wunsch" },
-//   { id: 4, name: "Benedict Kessler" },
-//   { id: 5, name: "Katelyn Rohan" },
-//   { id: 6, name: "Kenton Towne", disabled: true },
-//   { id: 7, name: "Therese Wunsch" },
-//   { id: 8, name: "Benedict Kessler" },
-//   { id: 9, name: "Katelyn Rohan" },
-//   { id: 10, name: "Kenton Towne", disabled: true },
-// ];
+import {
+  FloatingFocusManager,
+  autoUpdate,
+  flip,
+  offset,
+  size,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useRole,
+} from "@floating-ui/react";
+import cssStyles from "./SaSelect.module.css";
 
 export interface IWuSelectProps {
   label?: string;
@@ -50,7 +35,37 @@ export const SaSelect = ({
   const [selectedItem, setSelectedItem] = useState<ISelectOptionType | null>(
     null
   );
+  const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+
+  const { refs, floatingStyles, context } = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    middleware: [
+      offset(1),
+      flip(),
+      size({
+        apply({ availableWidth, availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `calc(${availableWidth - 15}px)`,
+            maxHeight: `calc(${availableHeight - 15}px)`,
+          });
+        },
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  const role = useRole(context);
+
+  // Merge all the interactions into prop getters
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    click,
+    dismiss,
+    role,
+  ]);
 
   const filteredOptions =
     query === ""
@@ -63,52 +78,59 @@ export const SaSelect = ({
     <div style={{ width }}>
       {label && <p className={classNames(cssStyles.label)}>{label}</p>}
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        {({ open }) => (
-          <div className={cssStyles.container}>
-            <Listbox.Button
-              className={classNames(cssStyles.trigger, {
-                [`${cssStyles.variantDefault}`]: true,
-              })}
-            >
-              <Fragment>
-                <span className={cssStyles.display}>
-                  {selectedItem ? selectedItem.name : "Select item"}
-                </span>
-                <span className={cssStyles.indicator}>
-                  <ChevronDownIcon
-                    style={{
-                      color: "#545E6B",
-                      width: "16px",
-                      height: "16px",
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                    }}
-                  />
-                </span>
-              </Fragment>
-            </Listbox.Button>
-            <Listbox.Options className={cssStyles.listBox}>
-              {filteredOptions.map((item) => (
-                <Listbox.Option
-                  key={item.id}
-                  value={item}
-                  as={Fragment}
-                  disabled={item.disabled}
-                >
-                  {({ active, selected, disabled }) => (
-                    <li
-                      className={classNames(cssStyles.option, {
-                        [`${cssStyles.optionActive}`]: active,
-                        [`${cssStyles.optionDisabled}`]: disabled,
-                      })}
-                    >
-                      <span>{item.name}</span>
-                    </li>
-                  )}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </div>
-        )}
+        <div className={cssStyles.container}>
+          <Listbox.Button
+            role="button"
+            ref={refs.setReference}
+            {...getReferenceProps()}
+            className={classNames(cssStyles.trigger, {
+              [`${cssStyles.variantDefault}`]: true,
+            })}
+          >
+            <Fragment>
+              <span className={cssStyles.display}>
+                {selectedItem ? selectedItem.name : "Select item"}
+              </span>
+              <span className={cssStyles.indicator}>
+                <ChevronDownIcon
+                  style={{
+                    color: "#545E6B",
+                    width: "16px",
+                    height: "16px",
+                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  }}
+                />
+              </span>
+            </Fragment>
+          </Listbox.Button>
+          {isOpen && (
+            <FloatingFocusManager context={context} modal={false}>
+              <div
+                ref={refs.setFloating}
+                style={floatingStyles}
+                {...getFloatingProps()}
+                className={cssStyles.listBox}
+              >
+                <Listbox.Options className={cssStyles.list} static>
+                  {filteredOptions.map((item) => (
+                    <Listbox.Option key={item.id} value={item} as={Fragment}>
+                      {({ active, selected, disabled }) => (
+                        <li
+                          className={classNames(cssStyles.option, {
+                            [`${cssStyles.optionActive}`]: active,
+                            [`${cssStyles.optionDisabled}`]: disabled,
+                          })}
+                        >
+                          <span>{item.name}</span>
+                        </li>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </div>
+            </FloatingFocusManager>
+          )}
+        </div>
       </Listbox>
     </div>
   );
