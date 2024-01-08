@@ -1,0 +1,78 @@
+.container {
+  width: 100%;
+  position: relative;
+}
+
+.trigger {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #eeeeee;
+  border-radius: 0;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  min-height: 32px;
+  padding: 8px;
+  text-decoration: none;
+  color: #545e6b;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 50ms ease;
+}
+
+.trigger::before {
+  content: "";
+  background-color: #545e6b;
+}
+
+.display {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+}
+
+.indicator {
+  display: flex;
+  width: 16px;
+  padding: 0;
+  margin-left: 4px;
+  align-items: center;
+}
+
+.listBox {
+  margin: 0;
+  padding: 0;
+  border: 1px solid #1b87e6;
+  background-color: transparent;
+  list-style: none;
+  position: absolute;
+  width: 100%;
+  box-shadow: 0px 4px 8px 0px #00000014;
+}
+
+.option {
+  font-size: 12px;
+  line-height: 16px;
+  padding: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.option:hover {
+  background-color: #eeeeee;
+}
+
+.optionActive {
+  background-color: #eeeeee;
+}
+
+.optionDisabled {
+  cursor: not-allowed;
+  color: #c5c5c5;
+}
