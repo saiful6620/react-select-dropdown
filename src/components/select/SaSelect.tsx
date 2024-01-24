@@ -18,7 +18,7 @@ import {
 } from "@floating-ui/react";
 import cssStyles from "./SaSelect.module.css";
 
-export interface IWuSelectProps {
+export interface IWuSelectProps extends React.CSSProperties {
   label?: string;
   placeholder?: string;
   width?: string;
@@ -29,7 +29,7 @@ export interface IWuSelectProps {
 export const SaSelect = ({
   label,
   placeholder = "Select item",
-  width = "220px",
+  ...style
 }: IWuSelectProps): React.JSX.Element => {
   const [selectedItem, setSelectedItem] = useState<ISelectOptionType | null>(
     null
@@ -74,63 +74,60 @@ export const SaSelect = ({
         });
 
   return (
-    <div style={{ width }}>
-      {label && <p className={classNames(cssStyles.label)}>{label}</p>}
-      <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <div className={cssStyles.container}>
-          <Listbox.Button
-            role="button"
-            ref={refs.setReference}
-            {...getReferenceProps()}
-            className={classNames(cssStyles.trigger, {
-              [`${cssStyles.variantDefault}`]: true,
-            })}
-          >
-            <Fragment>
-              <span className={cssStyles.display}>
-                {selectedItem ? selectedItem.name : placeholder}
-              </span>
-              <span className={cssStyles.indicator}>
-                <ChevronDownIcon
-                  style={{
-                    color: "#545E6B",
-                    width: "16px",
-                    height: "16px",
-                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                  }}
-                />
-              </span>
-            </Fragment>
-          </Listbox.Button>
-          {isOpen && (
-            <FloatingFocusManager context={context} modal={false}>
-              <div
-                ref={refs.setFloating}
-                style={floatingStyles}
-                {...getFloatingProps()}
-                className={cssStyles.listBox}
-              >
-                <Listbox.Options className={cssStyles.list} static>
-                  {filteredOptions.map((item) => (
-                    <Listbox.Option key={item.id} value={item} as={Fragment}>
-                      {({ active, selected, disabled }) => (
-                        <li
-                          className={classNames(cssStyles.option, {
-                            [`${cssStyles.optionActive}`]: active,
-                            [`${cssStyles.optionDisabled}`]: disabled,
-                          })}
-                        >
-                          <span>{item.name}</span>
-                        </li>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </div>
-            </FloatingFocusManager>
-          )}
-        </div>
-      </Listbox>
-    </div>
+    <Listbox value={selectedItem} onChange={setSelectedItem}>
+      <div className={cssStyles.container} style={style}>
+        <Listbox.Button
+          role="button"
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          className={classNames(cssStyles.trigger, {
+            [`${cssStyles.variantDefault}`]: true,
+          })}
+        >
+          <Fragment>
+            <span className={cssStyles.display}>
+              {selectedItem ? selectedItem.name : placeholder}
+            </span>
+            <span className={cssStyles.indicator}>
+              <ChevronDownIcon
+                style={{
+                  color: "#545E6B",
+                  width: "16px",
+                  height: "16px",
+                  transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+              />
+            </span>
+          </Fragment>
+        </Listbox.Button>
+        {isOpen && (
+          <FloatingFocusManager context={context} modal={false}>
+            <div
+              ref={refs.setFloating}
+              style={floatingStyles}
+              {...getFloatingProps()}
+              className={cssStyles.listBox}
+            >
+              <Listbox.Options className={cssStyles.list} static>
+                {filteredOptions.map((item) => (
+                  <Listbox.Option key={item.id} value={item} as={Fragment}>
+                    {({ active, selected, disabled }) => (
+                      <li
+                        className={classNames(cssStyles.option, {
+                          [`${cssStyles.optionActive}`]: active,
+                          [`${cssStyles.optionDisabled}`]: disabled,
+                        })}
+                      >
+                        <span>{item.name}</span>
+                      </li>
+                    )}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </div>
+          </FloatingFocusManager>
+        )}
+      </div>
+    </Listbox>
   );
 };

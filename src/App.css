@@ -3,10 +3,37 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #fafafa;
 }
 
 .card {
   padding: 2em;
+  background-color: #fff;
+  border-radius: 4px;
+  max-width: 780px;
+  box-shadow: 1px 1px 4px 1px #eaeaeb;
+}
+
+.card > .flex {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.card > .flex > div {
+  width: 32.33%;
+  max-width: 32.33%;
+  flex: 1 0;
+}
+
+.listItem {
+  font-size: 14px;
+  line-height: 20px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 15px;
+  box-shadow: 1px 1px 1px 0px #eaeaeb;
+  margin-bottom: 15px;
 }
 
 .read-the-docs {

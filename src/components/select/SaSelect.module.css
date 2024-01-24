@@ -1,5 +1,5 @@
 .container {
-  width: 100%;
+  /* width: 100%; */
   position: relative;
 }
 
@@ -74,13 +74,13 @@
 
 .listBox {
   border: 1px solid #1b87e6;
-  background-color: transparent;
   list-style: none;
   position: absolute;
   width: 100%;
-  box-shadow: 0px 4px 8px 0px #00000014;
   overflow: auto;
   box-sizing: border-box;
+  box-shadow: 1px 1px 4px 1px #eaeaeb;
+  background-color: #ffffff;
 }
 
 .listBox:focus {
